@@ -5,6 +5,8 @@
 //using System.Runtime.CompilerServices;
 //using System.Text;
 
+using System.Text;
+
 namespace ExcersizeQuiz
 {
     class Program
@@ -23,7 +25,7 @@ namespace ExcersizeQuiz
             {
                 Random random = new Random();
 
-                array[i] = random.Next(0, array.Length - 1);
+                array[i] = random.Next(1, array.Length);
             }
         }
 
@@ -36,7 +38,8 @@ namespace ExcersizeQuiz
         /// <returns>発生していない数字を文字列で表現</returns>
         static string FuncA(int[] array)
         {
-            string result = "";
+            string result;
+            StringBuilder sb = new StringBuilder();
 
             //チェック配列を作成
             bool[] num_check = new bool[array.Length];
@@ -48,19 +51,19 @@ namespace ExcersizeQuiz
             //使われた数字かどうかをチェックする
             for (int i = 0; i < array.Length; i++)
             {
-                num_check[array[i]] = true;
+                num_check[array[i] - 1] = true;
             }
 
             //出力文字列を作成
             for (int i = 0; i < array.Length; i++)
             {
                 if (!num_check[i]) {
-                    if (result.Length > 0) result += $",{i}";
-                    else result += $"{i}";
+                    if (sb.Length > 0) sb.Append($",{i + 1}");
+                    else sb.Append($"{i + 1}");
                 }
             }
 
-            result = "[" + result + "]";
+            result = "[" + sb + "]";
 
             return result;
         }
@@ -74,7 +77,8 @@ namespace ExcersizeQuiz
         /// <returns>発生していない数字を文字列で表現</returns>
         static string FuncB(int[] array)
         {
-            string result = "";
+            string result;
+            StringBuilder sb = new StringBuilder();
 
             //２重ループで解決
             for(int j=0; j < array.Length; j++)
@@ -82,7 +86,7 @@ namespace ExcersizeQuiz
                 bool check = false;
                 for(int i=0; i < array.Length; i++)
                 {
-                    if(j == array[i])
+                    if(array[i] == j + 1)
                     {
                         check = true;
                         break;
@@ -92,12 +96,12 @@ namespace ExcersizeQuiz
                 //使われているかどうかを確認した結果使われていなければ文字列に追記
                 if (!check)
                 {
-                    if (result.Length > 0) result += $",{j}";
-                    else result += $"{j}";
+                    if (sb.Length > 0) sb.Append($",{j + 1}");
+                    else sb.Append($"{j + 1}");
                 }
             }
 
-            result = "[" + result + "]";
+            result = "[" + sb + "]";
 
             return result;
         }
@@ -111,7 +115,9 @@ namespace ExcersizeQuiz
         /// <returns>発生していない数字を文字列で表現</returns>
         static string FuncC(int[] array)
         {
-            string result = "";
+            string result;
+            StringBuilder sb = new StringBuilder();
+
             //ソートのためクローンを作成
             int[] local_array = (int[])array.Clone();
             int current_index = 0;
@@ -119,10 +125,10 @@ namespace ExcersizeQuiz
             Array.Sort(local_array);
             for(int i=0; i<local_array.Length; i++)
             {
-                if (i != local_array[current_index])
+                if (local_array[current_index] != i + 1)
                 {
-                    if (result.Length > 0) result += $",{i}";
-                    else result += $"{i}";
+                    if (sb.Length > 0) sb.Append($",{i + 1}");
+                    else sb.Append($"{i + 1}");
                 }
                 else
                 {
@@ -137,7 +143,115 @@ namespace ExcersizeQuiz
                 }
             }
 
-            result = "[" + result + "]";
+            result = "[" + sb + "]";
+
+            return result;
+        }
+
+        static string FuncD(int[] array)
+        {
+            string result;
+            StringBuilder sb = new StringBuilder();
+
+            for(int i=0; i<array.Length;i++)
+            {
+                if(Array.IndexOf(array, i+1) == -1) {
+                    if (sb.Length > 0) sb.Append($",{i + 1}");
+                    else sb.Append($"{i + 1}");
+                }
+            }
+
+            result = "[" + sb + "]";
+
+            return result;
+        }
+
+        static string FuncE(int[] array)
+        {
+            string result;
+            StringBuilder sb = new StringBuilder();
+            ulong Check = 0;
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                Check |= (ulong)Math.Pow(2, array[i]);
+            }
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                if ((Check & (ulong)Math.Pow(2, i + 1)) == 0)
+                {
+                    if (sb.Length > 0) sb.Append($",{i + 1}");
+                    else sb.Append($"{i + 1}");
+                }
+            }
+
+            result = "[" + sb + "]";
+
+            return result;
+        }
+
+
+        static string FuncF(int[] array)
+        {
+            string result;
+            StringBuilder sb = new StringBuilder();
+
+            //回答用配列(List)を作成
+            var resultList = new List<int>();
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                resultList.Add(i + 1);
+            }
+
+            //使われた数字かどうかをチェックする
+            for (int i = 0; i < array.Length; i++)
+            {
+                resultList.RemoveAll(x => x == array[i]);
+            }
+
+            //出力文字列を作成
+            foreach(int item in resultList)
+            {
+                if (sb.Length > 0) sb.Append($",{item}");
+                else sb.Append($"{item}");
+            }
+
+            result = "[" + sb + "]";
+
+            return result;
+        }
+
+        static string FuncG(int[] array)
+        {
+            string result;
+            StringBuilder sb = new StringBuilder();
+
+            //回答用配列を作成
+            int[] resultArray = new int[array.Length];
+            for (int i = 0; i < resultArray.Length; i++)
+            {
+                resultArray[i] = i + 1;
+            }
+
+            //使われた数字かどうかをチェックする
+            for (int i = 0; i < array.Length; i++)
+            {
+                resultArray[array[i] - 1] = 0;
+            }
+
+            //出力文字列を作成
+            for(int i = 0; i < resultArray.Length; i++)
+            {
+                if (resultArray[i] != 0)
+                {
+                    if (sb.Length > 0) sb.Append($",{resultArray[i]}");
+                    else sb.Append($"{resultArray[i]}");
+                }
+            }
+
+            result = "[" + sb + "]";
 
             return result;
         }
@@ -172,7 +286,22 @@ namespace ExcersizeQuiz
             //関数C
             Console.WriteLine("関数C:ソートした後にチェックをした回答");
             Console.WriteLine(FuncC(array) + "\n");
-            
+
+            //関数D
+            Console.WriteLine("関数D:IndexOfを使用した回答");
+            Console.WriteLine(FuncD(array) + "\n");
+
+            //関数E
+            Console.WriteLine("関数E:ビット演算を使用した回答");
+            Console.WriteLine(FuncE(array) + "\n");
+
+            //関数F
+            Console.WriteLine("関数F:回答配列から削除する方法で回答");
+            Console.WriteLine(FuncF(array) + "\n");
+
+            //関数G
+            Console.WriteLine("関数G:検索結果を直接回答にする方法で回答");
+            Console.WriteLine(FuncF(array) + "\n");
         }
     }
 }
